@@ -517,6 +517,7 @@ rm -f %{buildroot}%{_datadir}/drizzle7/drizzle.server
 rm -f %{buildroot}%{_libdir}/drizzle7/*.la
 rm -f %{buildroot}%{_libdir}/*.la
 
+%if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
 
 %postun -n %{libname} -p /sbin/ldconfig
@@ -528,6 +529,7 @@ rm -f %{buildroot}%{_libdir}/*.la
 %post -n %{drizzle2_libname} -p /sbin/ldconfig
 
 %postun -n %{drizzle2_libname} -p /sbin/ldconfig
+%endif
 
 %pre server
 getent group drizzle >/dev/null || groupadd -r drizzle
