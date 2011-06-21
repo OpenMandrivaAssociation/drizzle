@@ -73,7 +73,6 @@ Patch8:		drizzle7-2011.06.19-strfmt.diff
 Patch9:		drizzle7-2011.06.19-linkage_fix.diff
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.39
-BuildRequires:	chrpath
 BuildRequires:	curl-devel
 BuildRequires:	doxygen
 BuildRequires:	doxygen
@@ -81,15 +80,16 @@ BuildRequires:  gcc-c++ >= 4.4
 BuildRequires:	gettext-devel
 BuildRequires:	gnutls-devel
 BuildRequires:	gperf
+BuildRequires:	intltool
 BuildRequires:	libevent-devel
 BuildRequires:	libuuid-devel
 BuildRequires:	ncurses-devel
+BuildRequires:	openldap-devel
 BuildRequires:	pam-devel
 BuildRequires:	pcre-devel
 BuildRequires:	protobuf-devel
 BuildRequires:	readline-devel
 BuildRequires:	zlib-devel
-BuildRequires:	openldap-devel
 %if %{with haildb}
 BuildRequires:	haildb-devel
 %endif
