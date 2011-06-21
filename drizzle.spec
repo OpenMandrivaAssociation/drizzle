@@ -429,8 +429,7 @@ autoreconf -fi
 export CXXFLAGS="${CXXFLAGS} -Wno-error"
 
 # need to handle optional plugins properly
-OPTS="--enable-profiling
-    --disable-rpath
+OPTS="--disable-rpath
     --localstatedir=/var/lib/drizzle
     --without-auth-test-plugin
     --without-hello-world-plugin
