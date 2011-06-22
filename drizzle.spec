@@ -49,7 +49,7 @@
 
 Summary:	A Lightweight SQL Database for Cloud and Web 
 Name:		drizzle
-Version:	2011.06.19
+Version:	2011.06.20
 Release:	%mkrel 1
 # All sources under drizzled/ are GPLv2.  
 # Sources under plugin/ are either GPLv2 or BSD.
@@ -57,7 +57,7 @@ License:	GPLv2 and BSD
 Group:		System/Servers
 URL:		http://launchpad.net/drizzle
 # This is going to change every time
-Source0:	http://launchpad.net/drizzle/fremont/2011-06-06/+download/drizzle7-2011.06.19.tar.gz
+Source0:	http://launchpad.net/drizzle/fremont/2011-06-20/+download/drizzle7-2011.06.20.tar.gz
 Source1:	drizzled.cnf
 Source2:	drizzle.cnf
 Source3:	drizzled.init
