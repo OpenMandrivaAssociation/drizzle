@@ -70,6 +70,7 @@ Patch3:		drizzle7-2011.01.07-tests.patch
 # temporary fix for: https://bugs.launchpad.net/drizzle/+bug/712194
 Patch7:		plugin-configs.patch
 Patch9:		drizzle7-2011.06.19-linkage_fix.diff
+BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.39
 BuildRequires:	curl-devel
@@ -81,6 +82,7 @@ BuildRequires:	gnutls-devel
 BuildRequires:	gperf
 BuildRequires:	intltool
 BuildRequires:	libevent-devel
+BuildRequires:	libtool
 BuildRequires:	libuuid-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openldap-devel
