@@ -49,7 +49,7 @@
 
 Summary:	A Lightweight SQL Database for Cloud and Web 
 Name:		drizzle
-Version:	2011.07.21
+Version:	2011.08.23
 Release:	%mkrel 1
 # All sources under drizzled/ are GPLv2.  
 # Sources under plugin/ are either GPLv2 or BSD.
@@ -57,7 +57,7 @@ License:	GPLv2 and BSD
 Group:		System/Servers
 URL:		http://launchpad.net/drizzle
 # This is going to change every time
-Source0:	http://launchpad.net/drizzle/fremont/2011-07-04/+download/drizzle7-2011.07.21.tar.gz
+Source0:	http://launchpad.net/drizzle/fremont/2011-08-01/+download/drizzle7-2011.08.23.tar.gz
 Source1:	drizzled.cnf
 Source2:	drizzle.cnf
 Source3:	drizzled.init
@@ -69,7 +69,6 @@ Source4:	gen_plugin_configs_patch.sh
 Patch3:		drizzle7-2011.01.07-tests.patch
 # temporary fix for: https://bugs.launchpad.net/drizzle/+bug/712194
 Patch7:		plugin-configs.patch
-Patch8:		drizzle7-2011.06.19-strfmt.diff
 Patch9:		drizzle7-2011.06.19-linkage_fix.diff
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.39
@@ -417,7 +416,6 @@ This package includes the Slave Replication plugin.
 # Patches
 %patch3 -p1 -b .tests
 %patch7 -p1 -b .plugin-configs
-%patch8 -p0
 %patch9 -p0
 
 %build
