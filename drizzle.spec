@@ -632,6 +632,7 @@ rm -rf %{buildroot}
 %{_libdir}/drizzle7/libmd5_plugin.so
 %{_libdir}/drizzle7/libmulti_thread_plugin.so
 %{_libdir}/drizzle7/libperformance_dictionary_plugin.so
+%{_libdir}/drizzle7/libquery_log_plugin.so
 %{_libdir}/drizzle7/librand_function_plugin.so
 %{_libdir}/drizzle7/libregex_policy_plugin.so
 %{_libdir}/drizzle7/libreverse_function_plugin.so
