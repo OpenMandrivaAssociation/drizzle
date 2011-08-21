@@ -516,8 +516,8 @@ popd
 
 # cleanup
 rm -f %{buildroot}%{_datadir}/drizzle7/drizzle.server
-rm -f %{buildroot}%{_libdir}/drizzle7/*.la
-rm -f %{buildroot}%{_libdir}/*.la
+rm -f %{buildroot}%{_libdir}/drizzle7/*.*a
+rm -f %{buildroot}%{_libdir}/*.*a
 
 %if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
@@ -628,7 +628,6 @@ rm -rf %{buildroot}
 %{_libdir}/drizzle7/libhttp_functions_plugin.so
 %{_libdir}/drizzle7/libjson_server_plugin.so
 %{_libdir}/drizzle7/liblength_plugin.so
-%{_libdir}/drizzle7/liblogging_query_plugin.so
 %{_libdir}/drizzle7/liblogging_stats_plugin.so
 %{_libdir}/drizzle7/libmd5_plugin.so
 %{_libdir}/drizzle7/libmulti_thread_plugin.so
