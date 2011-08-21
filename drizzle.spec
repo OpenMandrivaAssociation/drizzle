@@ -70,6 +70,7 @@ Patch3:		drizzle7-2011.01.07-tests.patch
 # temporary fix for: https://bugs.launchpad.net/drizzle/+bug/712194
 Patch7:		plugin-configs.patch
 Patch9:		drizzle7-2011.06.19-linkage_fix.diff
+Patch10:	drizzle7-2011.08.24-fmtstr.diff
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.39
@@ -419,6 +420,7 @@ This package includes the Slave Replication plugin.
 %patch3 -p1 -b .tests
 %patch7 -p1 -b .plugin-configs
 %patch9 -p0
+%patch10 -p0
 
 %build
 %serverbuild
