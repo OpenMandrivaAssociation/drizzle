@@ -49,7 +49,7 @@
 
 Summary:	A Lightweight SQL Database for Cloud and Web 
 Name:		drizzle
-Version:	2011.08.24
+Version:	2011.10.28
 Release:	%mkrel 1
 # All sources under drizzled/ are GPLv2.  
 # Sources under plugin/ are either GPLv2 or BSD.
@@ -57,7 +57,7 @@ License:	GPLv2 and BSD
 Group:		System/Servers
 URL:		http://launchpad.net/drizzle
 # This is going to change every time
-Source0:	http://launchpad.net/drizzle/fremont/2011-08-15/+download/drizzle7-2011.08.24.tar.gz
+Source0:	http://launchpad.net/drizzle/fremont/2011-10-25/+download/drizzle7-2011.10.28.tar.gz
 Source1:	drizzled.cnf
 Source2:	drizzle.cnf
 Source3:	drizzled.init
@@ -519,20 +519,6 @@ rm -f %{buildroot}%{_datadir}/drizzle7/drizzle.server
 rm -f %{buildroot}%{_libdir}/drizzle7/*.*a
 rm -f %{buildroot}%{_libdir}/*.*a
 
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-
-%postun -n %{libname} -p /sbin/ldconfig
-
-%post -n %{drizzle1_libname} -p /sbin/ldconfig
-
-%postun -n %{drizzle1_libname} -p /sbin/ldconfig
-
-%post -n %{drizzle2_libname} -p /sbin/ldconfig
-
-%postun -n %{drizzle2_libname} -p /sbin/ldconfig
-%endif
-
 %pre server
 getent group drizzle >/dev/null || groupadd -r drizzle
 getent passwd drizzle >/dev/null || \
@@ -621,7 +607,7 @@ rm -rf %{buildroot}
 %{_libdir}/drizzle7/libconnection_id_plugin.so
 %{_libdir}/drizzle7/libcrc32_plugin.so
 %{_libdir}/drizzle7/libdefault_replicator_plugin.so
-%{_libdir}/drizzle7/liberrmsg_stderr_plugin.so
+# %{_libdir}/drizzle7/liberrmsg_stderr_plugin.so
 %{_libdir}/drizzle7/libfunction_dictionary_plugin.so
 %{_libdir}/drizzle7/libhello_events_plugin.so
 %{_libdir}/drizzle7/libhex_functions_plugin.so
@@ -640,7 +626,7 @@ rm -rf %{buildroot}
 %{_libdir}/drizzle7/libshutdown_function_plugin.so
 %{_libdir}/drizzle7/libstorage_engine_api_tester_plugin.so
 %{_libdir}/drizzle7/libsubstr_functions_plugin.so
-%{_libdir}/drizzle7/libsyslog_plugin.so
+# %{_libdir}/drizzle7/libsyslog_plugin.so
 %{_libdir}/drizzle7/libtrigger_dictionary_plugin.so
 %{_libdir}/drizzle7/libutility_dictionary_plugin.so
 %{_libdir}/drizzle7/libuuid_function_plugin.so
@@ -689,6 +675,7 @@ rm -rf %{buildroot}
 %{_datadir}/locale/uk/LC_MESSAGES/drizzle7.mo
 %{_datadir}/locale/zh_CN/LC_MESSAGES/drizzle7.mo
 %{_datadir}/locale/zh_HK/LC_MESSAGES/drizzle7.mo
+%{_datadir}/locale/fil/LC_MESSAGES/drizzle7.mo
 
 # OPTIONAL PLUGINS
 %if %{with auth_file}
@@ -710,6 +697,11 @@ rm -rf %{buildroot}
 %defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/auth-ldap.cnf
 %{_libdir}/drizzle7/libauth_ldap_plugin.so
+%{_libdir}/drizzle7/libauth_schema_plugin.so
+%{_datadir}/drizzle7/README.auth_ldap
+%{_datadir}/drizzle7/drizzle_create_ldap_user
+%{_datadir}/drizzle7/drizzle_openldap.ldif
+%{_datadir}/drizzle7/drizzle_openldap.schema
 %endif
 
 %if %{with auth_pam}
@@ -803,4 +795,3 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/slave.cnf
 %{_libdir}/drizzle7/libslave_plugin.so
 %endif
-
