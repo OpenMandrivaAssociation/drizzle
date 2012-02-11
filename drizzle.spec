@@ -50,7 +50,7 @@
 Summary:	A Lightweight SQL Database for Cloud and Web 
 Name:		drizzle
 Version:	2011.10.28
-Release:	%mkrel 1
+Release:	%mkrel 2
 # All sources under drizzled/ are GPLv2.  
 # Sources under plugin/ are either GPLv2 or BSD.
 License:	GPLv2 and BSD
