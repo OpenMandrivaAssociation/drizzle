@@ -23,13 +23,11 @@
 %bcond_without filtered_replicator
 %bcond_without logging_query
 %bcond_without mysql_protocol
-%bcond_without pbms
 %bcond_without simple_user_policy
 %bcond_without slave
 
 # plugins disabled by default, either missing deps
 # or need to be 'figured out' why they're not building 
-%bcond_with haildb
 %bcond_with blitzdb
 %bcond_with rabbitmq
 %bcond_with gearman_udf
@@ -39,25 +37,21 @@
 %define libname %mklibname drizzledmessage %{drizzledmessage_major}
 %define develname %mklibname -d drizzledmessage
 
-%define drizzle1_major 1
-%define drizzle1_libname %mklibname drizzle %{drizzle1_major}
-%define drizzle1_develname %mklibname -d drizzle %{drizzle1_major}
-
-%define drizzle2_major 3
-%define drizzle2_libname %mklibname drizzle %{drizzle2_major}
-%define drizzle2_develname %mklibname -d drizzle %{drizzle2_major}
+%define drizzle_major 1
+%define drizzle_libname %mklibname drizzle %{drizzle_major}
+%define drizzle_develname %mklibname -d drizzle %{drizzle_major}
 
 Summary:	A Lightweight SQL Database for Cloud and Web 
 Name:		drizzle
-Version:	2011.10.28
-Release:	%mkrel 2
+Version:	2012.01.30
+Release:	%mkrel 1
 # All sources under drizzled/ are GPLv2.  
 # Sources under plugin/ are either GPLv2 or BSD.
 License:	GPLv2 and BSD
 Group:		System/Servers
 URL:		http://launchpad.net/drizzle
 # This is going to change every time
-Source0:	http://launchpad.net/drizzle/fremont/2011-10-25/+download/drizzle7-2011.10.28.tar.gz
+Source0:	http://launchpad.net/drizzle/fremont/2012-01-13/+download/drizzle7-2012.01.30.tar.gz
 Source1:	drizzled.cnf
 Source2:	drizzle.cnf
 Source3:	drizzled.init
@@ -70,7 +64,6 @@ Patch3:		drizzle7-2011.01.07-tests.patch
 # temporary fix for: https://bugs.launchpad.net/drizzle/+bug/712194
 Patch7:		plugin-configs.patch
 Patch9:		drizzle7-2011.06.19-linkage_fix.diff
-Patch10:	drizzle7-2011.08.24-fmtstr.diff
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.39
@@ -92,9 +85,6 @@ BuildRequires:	pcre-devel
 BuildRequires:	protobuf-devel
 BuildRequires:	readline-devel
 BuildRequires:	zlib-devel
-%if %{with haildb}
-BuildRequires:	haildb-devel
-%endif
 %if %{with gearman_udf}
 BuildRequires: libgearman-devel
 %endif
@@ -124,55 +114,39 @@ This package contains the header files and development libraries for %{name}.
 If you like to develop programs using %{name}, you will need to install
 %{name}-devel.
 
-%package -n	%{drizzle1_libname}
+%package -n	%{drizzle_libname}
 Summary:	Drizzle Client & Protocol Library v1
 Group:		System/Libraries
 Provides:	drizzle-client = %{version}-%{release}
+Provides:	%{mklibname drizzle 2} = %{version}-%{release}
+Obsoletes:	%{mklibname drizzle 2}
 
-%description -n	%{drizzle1_libname}
+%description -n	%{drizzle_libname}
 libdrizzle is the the client and protocol library for the Drizzle project. The
 server, drizzled, will use this as for the protocol library, as well as the
 client utilities and any new projects that require low-level protocol
 communication (like proxies). Other language interfaces (PHP extensions, SWIG,
 ...) should be built off of this interface.
 
-%package -n	%{drizzle1_develname}
+%package -n	%{drizzle_develname}
 Summary:	Drizzle Client & Protocol Library - Header files
 Group:		Development/C
-Requires:	%{drizzle1_libname} >= %{version}-%{release}
-# because libdrizzle-0.8-*.src.rpm is dead:
-Obsoletes:	%{mklibname drizzle -d}
+Requires:	%{drizzle_libname} >= %{version}-%{release}
+Obsoletes:	%{mklibname drizzle 1 -d}
+Obsoletes:	%{mklibname drizzle 2 -d}
+Provides:	drizzle-client-devel = %{version}-%{release}
 Provides:	drizzle1-client-devel = %{version}-%{release}
-
-%description -n %{drizzle1_develname}
-Development files for the Drizzle Client & Protocol Library v1
-
-%package -n	%{drizzle2_libname}
-Summary:	Drizzle Client & Protocol Library v2
-Group:		System/Libraries
-Provides:	drizzle-client = %{version}-%{release}
-
-%description -n	%{drizzle2_libname}
-libdrizzle is the the client and protocol library for the Drizzle project. The
-server, drizzled, will use this as for the protocol library, as well as the
-client utilities and any new projects that require low-level protocol
-communication (like proxies). Other language interfaces (PHP extensions, SWIG,
-...) should be built off of this interface.
-
-%package -n	%{drizzle2_develname}
-Summary:	Drizzle Client & Protocol Library - Header files
-Group:		Development/C
-Requires:	%{drizzle2_libname} >= %{version}-%{release}
 Provides:	drizzle2-client-devel = %{version}-%{release}
+Obsoletes:	drizzle1-client-devel
+Obsoletes:	drizzle2-client-devel
 
-%description -n %{drizzle2_develname}
+%description -n %{drizzle_develname}
 Development files for the Drizzle Client & Protocol Library v1
 
 %package	client
 Summary:	Client Utilities for %{name}
 Group:		System/Servers
 Requires:	%{libname} >= %{version}-%{release}
-#Requires:	libdrizzle
 
 %description	client
 Client utilities for %{name}.
@@ -286,21 +260,6 @@ originally derived from MySQL.
 This package includes the Filtered Replicator plugin.
 %endif
 
-%if %{with haildb}
-%package	plugin-haildb
-Summary:	HailDB Storage Engine Plugin for %{name}
-Group:		System/Servers
-Requires:	%{name}-server >= %{version}-%{release}
-#Requires:	haildb
-
-%description	plugin-haildb
-Drizzle is a database optimized for Cloud and Net applications. It is designed
-for massive concurrency on modern multi-cpu/core architecture. The code is
-originally derived from MySQL.
-
-This package includes the HailDB Storage Engine plugin.
-%endif
-
 %if %{with gearman_udf}
 %package	plugin-gearman-udf
 Summary:	Gearman User Defined Functions Plugin for %{name}
@@ -357,20 +316,6 @@ originally derived from MySQL.
 This package includes the MySQL Protocol plugin.
 %endif
 
-%if %{with pbms}
-%package	plugin-pbms
-Summary:	PrimeBase Blob Streaming Plugin for %{name}
-Group:		System/Servers
-Requires:	%{name}-server >= %{version}-%{release}
-
-%description	plugin-pbms
-Drizzle is a database optimized for Cloud and Net applications. It is designed
-for massive concurrency on modern multi-cpu/core architecture. The code is
-originally derived from MySQL.
-
-This package includes the PrimeBase Blob Streaming plugin.
-%endif 
-
 %if %{with rabbitmq}
 %package	plugin-rabbitmq
 Summary:	RabbitMQ Transaction Log Plugin for %{name}
@@ -420,7 +365,6 @@ This package includes the Slave Replication plugin.
 %patch3 -p1 -b .tests
 %patch7 -p1 -b .plugin-configs
 %patch9 -p0
-%patch10 -p0
 
 %build
 %serverbuild
@@ -460,10 +404,8 @@ optionally_include auth_ldap %{with auth_ldap}
 optionally_include auth_pam %{with auth_pam}
 optionally_include debug %{with debug}
 optionally_include filtered_replicator %{with filtered_replicator}
-optionally_include haildb %{with haildb}
 optionally_include logging_query %{with logging_query}
 optionally_include mysql_protocol %{with mysql_protocol}
-optionally_include pbms %{with pbms}
 optionally_include rabbitmq %{with rabbitmq}
 optionally_include simple_user_policy %{with simple_user_policy}
 optionally_include gearman_udf %{with gearman_udf}
@@ -518,6 +460,7 @@ popd
 rm -f %{buildroot}%{_datadir}/drizzle7/drizzle.server
 rm -f %{buildroot}%{_libdir}/drizzle7/*.*a
 rm -f %{buildroot}%{_libdir}/*.*a
+rm -f %{buildroot}%{_sysconfdir}/drizzle/conf.d/pbms.cnf
 
 %pre server
 getent group drizzle >/dev/null || groupadd -r drizzle
@@ -550,6 +493,7 @@ rm -rf %{buildroot}
 %dir %{_sysconfdir}/drizzle
 %dir %{_sysconfdir}/drizzle/conf.d
 %{_mandir}/man1/drizzle.1*
+%{_mandir}/man1/drizzledump.1*
 %{_mandir}/man1/drizzleimport.1*
 %{_mandir}/man1/drizzleslap.1*
 %{_mandir}/man8/drizzled.8*
@@ -564,25 +508,17 @@ rm -rf %{buildroot}
 %{_libdir}/libdrizzledmessage.so
 %{_libdir}/pkgconfig/drizzle7.pc
 
-%files -n %{drizzle1_libname}
+%files -n %{drizzle_libname}
 %defattr (-,root,root,-)
-%{_libdir}/libdrizzle.so.%{drizzle1_major}*
+%{_libdir}/libdrizzle.so.%{drizzle_major}*
 
-%files -n %{drizzle1_develname}
+%files -n %{drizzle_develname}
 %defattr (-,root,root,-)
 %{_includedir}/libdrizzle-1.0
+%dir %{_includedir}/libdrizzle
+%{_includedir}/libdrizzle/*.h
 %{_libdir}/libdrizzle.so
-%{_libdir}/pkgconfig/libdrizzle-1.0.pc
-
-%files -n %{drizzle2_libname}
-%defattr (-,root,root,-)
-%{_libdir}/libdrizzle-2.0.so.%{drizzle2_major}*
-
-%files -n %{drizzle2_develname}
-%defattr (-,root,root,-)
-%{_includedir}/libdrizzle-2.0
-%{_libdir}/libdrizzle-2.0.so
-%{_libdir}/pkgconfig/libdrizzle-2.0.pc
+%{_libdir}/pkgconfig/libdrizzle*.pc
 
 %files client
 %defattr (-,root,root,-) 
@@ -739,13 +675,6 @@ rm -rf %{buildroot}
 %{_libdir}/drizzle7/libgearman_udf_plugin.so
 %endif
 
-%if %{with haildb}
-%files plugin-haildb
-%defattr (-,root,root,-)
-%config(noreplace) %{_sysconfdir}/drizzle/conf.d/haildb.cnf
-%{_libdir}/drizzle7/libhaildb_plugin.so
-%endif
-
 %if %{with logging_gearman}
 %files plugin-logging-gearman
 %defattr (-,root,root,-)
@@ -766,13 +695,6 @@ rm -rf %{buildroot}
 # mysql_protocol is static
 # %%{_libdir}/drizzle7/libmysql_protocol_plugin.so
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/mysql-protocol.cnf
-%endif
-
-%if %{with pbms}
-%files plugin-pbms
-%defattr (-,root,root,-)
-%config(noreplace) %{_sysconfdir}/drizzle/conf.d/pbms.cnf
-%{_libdir}/drizzle7/libpbms_plugin.so
 %endif
 
 %if %{with rabbitmq}
