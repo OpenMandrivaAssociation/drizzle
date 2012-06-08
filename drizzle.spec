@@ -35,16 +35,16 @@
 
 %define drizzledmessage_major 0
 %define libname %mklibname drizzledmessage %{drizzledmessage_major}
-%define develname %mklibname -d drizzledmessage
+%define devname %mklibname -d drizzledmessage
 
 %define drizzle_major 1
 %define drizzle_libname %mklibname drizzle %{drizzle_major}
-%define drizzle_develname %mklibname -d drizzle %{drizzle_major}
+%define drizzle_devname %mklibname -d drizzle %{drizzle_major}
 
 Summary:	A Lightweight SQL Database for Cloud and Web 
 Name:		drizzle
 Version:	2012.01.30
-Release:	%mkrel 1
+Release:	2
 # All sources under drizzled/ are GPLv2.  
 # Sources under plugin/ are either GPLv2 or BSD.
 License:	GPLv2 and BSD
@@ -64,7 +64,7 @@ Patch3:		drizzle7-2011.01.07-tests.patch
 # temporary fix for: https://bugs.launchpad.net/drizzle/+bug/712194
 Patch7:		plugin-configs.patch
 Patch9:		drizzle7-2011.06.19-linkage_fix.diff
-BuildRequires:	automake
+
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.39
 BuildRequires:	curl-devel
@@ -88,7 +88,6 @@ BuildRequires:	zlib-devel
 %if %{with gearman_udf}
 BuildRequires: libgearman-devel
 %endif
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Drizzle is a transactional SQL92 compliant relational database, geared towards
@@ -97,19 +96,18 @@ a plugin based architecture.
 %package -n	%{libname}
 Summary:	Common Libraries Shared by %{name} Client and Server
 Group:		System/Libraries
-Requires:	%{libname} >= %{version}-%{release}
 Provides:	drizzle-lib = %{version}-%{release}
 
 %description -n	%{libname}
 Common Libraries Shared by %{name} Client and Server
 
-%package -n	%{develname}
+%package -n	%{devname}
 Summary:	Header Files and Development Libraries for %{name}
 Group:		Development/C
 Requires:	%{libname} >= %{version}-%{release}
 Provides:	drizzle-devel = %{version}-%{release}
 
-%description -n	%{develname}
+%description -n	%{devname}
 This package contains the header files and development libraries for %{name}.
 If you like to develop programs using %{name}, you will need to install
 %{name}-devel.
@@ -128,7 +126,7 @@ client utilities and any new projects that require low-level protocol
 communication (like proxies). Other language interfaces (PHP extensions, SWIG,
 ...) should be built off of this interface.
 
-%package -n	%{drizzle_develname}
+%package -n	%{drizzle_devname}
 Summary:	Drizzle Client & Protocol Library - Header files
 Group:		Development/C
 Requires:	%{drizzle_libname} >= %{version}-%{release}
@@ -140,7 +138,7 @@ Provides:	drizzle2-client-devel = %{version}-%{release}
 Obsoletes:	drizzle1-client-devel
 Obsoletes:	drizzle2-client-devel
 
-%description -n %{drizzle_develname}
+%description -n %{drizzle_devname}
 Development files for the Drizzle Client & Protocol Library v1
 
 %package	client
@@ -368,7 +366,6 @@ This package includes the Slave Replication plugin.
 
 %build
 %serverbuild
-
 autoreconf -fi
 
 # FIX ME: Warnings treated as errors in mock, but not straight builds... ???
@@ -426,8 +423,6 @@ optionally_include slave %{with slave}
 %endif
 
 %install
-rm -rf %{buildroot}
-
 install -d %{buildroot}%{_initrddir}
 install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}%{_sysconfdir}/drizzle
@@ -437,6 +432,8 @@ install -d %{buildroot}%{_localstatedir}/lib/drizzle
 install -d %{buildroot}%{_localstatedir}/run/drizzle
 
 %makeinstall_std AM_INSTALL_PROGRAM_FLAGS=""
+
+%find_lang %{name}7
 
 # fix broken symlink
 rm -f %{buildroot}%{_sbindir}/drizzled %{buildroot}%{_sbindir}/drizzled
@@ -484,11 +481,7 @@ if [ $1 = 0 ]; then
     /sbin/chkconfig --del drizzled
 fi
 
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr (-,root,root,-) 
 %doc AUTHORS COPYING NEWS README
 %dir %{_sysconfdir}/drizzle
 %dir %{_sysconfdir}/drizzle/conf.d
@@ -499,21 +492,17 @@ rm -rf %{buildroot}
 %{_mandir}/man8/drizzled.8*
 
 %files -n %{libname}
-%defattr (-,root,root,-) 
 %{_libdir}/libdrizzledmessage.so.%{drizzledmessage_major}*
 
-%files -n %{develname}
-%defattr (-,root,root,-) 
+%files -n %{devname}
 %{_includedir}/drizzle7
 %{_libdir}/libdrizzledmessage.so
 %{_libdir}/pkgconfig/drizzle7.pc
 
 %files -n %{drizzle_libname}
-%defattr (-,root,root,-)
 %{_libdir}/libdrizzle.so.%{drizzle_major}*
 
-%files -n %{drizzle_develname}
-%defattr (-,root,root,-)
+%files -n %{drizzle_devname}
 %{_includedir}/libdrizzle-1.0
 %dir %{_includedir}/libdrizzle
 %{_includedir}/libdrizzle/*.h
@@ -521,12 +510,10 @@ rm -rf %{buildroot}
 %{_libdir}/pkgconfig/libdrizzle*.pc
 
 %files client
-%defattr (-,root,root,-) 
 %config(noreplace) %{_sysconfdir}/drizzle/drizzle.cnf
 %{_bindir}/drizzle*
 
-%files server
-%defattr (-,root,root,-) 
+%files server -f %{name}7.lang
 %attr(0755,drizzle,drizzle) %dir %{_localstatedir}/log/drizzle
 %attr(0755,drizzle,drizzle) %dir %{_localstatedir}/lib/drizzle
 %attr(0755,drizzle,drizzle) %dir %{_localstatedir}/run/drizzle
@@ -567,70 +554,22 @@ rm -rf %{buildroot}
 %{_libdir}/drizzle7/libutility_dictionary_plugin.so
 %{_libdir}/drizzle7/libuuid_function_plugin.so
 %{_libdir}/drizzle7/libversion_plugin.so
-%{_datadir}/locale/ar/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/bn/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/ca/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/cs/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/cy/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/da/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/de/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/el/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/en_AU/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/en_GB/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/eo/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/es/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/eu/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/fo/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/fr/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/gl/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/he/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/hi/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/hu/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/id/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/it/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/ja/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/ko/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/ml/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/mr/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/ms/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/mt/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/nb/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/nl/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/oc/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/pl/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/pt/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/pt_BR/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/ro/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/ru/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/sk/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/sq/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/sv/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/ta/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/te/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/tr/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/uk/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/zh_CN/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/zh_HK/LC_MESSAGES/drizzle7.mo
-%{_datadir}/locale/fil/LC_MESSAGES/drizzle7.mo
 
 # OPTIONAL PLUGINS
 %if %{with auth_file}
 %files plugin-auth-file
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/auth-file.cnf
 %{_libdir}/drizzle7/libauth_file_plugin.so
 %endif
 
 %if %{with auth_http}
 %files plugin-auth-http
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/auth-http.cnf
 %{_libdir}/drizzle7/libauth_http_plugin.so
 %endif
 
 %if %{with auth_ldap}
 %files plugin-auth-ldap
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/auth-ldap.cnf
 %{_libdir}/drizzle7/libauth_ldap_plugin.so
 %{_libdir}/drizzle7/libauth_schema_plugin.so
@@ -642,56 +581,48 @@ rm -rf %{buildroot}
 
 %if %{with auth_pam}
 %files plugin-auth-pam
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/auth-pam.cnf
 %{_libdir}/drizzle7/libauth_pam_plugin.so
 %endif
 
 %if %{with blitzdb_plugin}
 %files plugin-blitzdb
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/blitzdb.cnf
 %{_libdir}/drizzle7/libblitzdb_plugin.so
 %endif
 
 %if %{with debug}
 %files plugin-debug
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/debug.cnf
 %{_libdir}/drizzle7/libdebug_plugin.so
 %endif
 
 %if %{with filtered_replicator}
 %files plugin-filtered-replicator
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/filtered-replicator.cnf
 %{_libdir}/drizzle7/libfiltered_replicator_plugin.so
 %endif
 
 %if %{with gearman_udf}
 %files plugin-gearman-udf
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/gearman-udf.cnf
 %{_libdir}/drizzle7/libgearman_udf_plugin.so
 %endif
 
 %if %{with logging_gearman}
 %files plugin-logging-gearman
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/logging-gearman.cnf
 %{_libdir}/drizzle7/liblogging_gearman_plugin.so
 %endif
 
 %if %{with logging_query}
 %files plugin-logging-query
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/logging-query.cnf
 %{_libdir}/drizzle7/liblogging_query_plugin.so
 %endif
 
 %if %{with mysql_protocol}
 %files plugin-mysql-protocol
-%defattr (-,root,root,-)
 # mysql_protocol is static
 # %%{_libdir}/drizzle7/libmysql_protocol_plugin.so
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/mysql-protocol.cnf
@@ -699,21 +630,18 @@ rm -rf %{buildroot}
 
 %if %{with rabbitmq}
 %files plugin-rabbitmq
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/rabbitmq.cnf
 %{_libdir}/drizzle7/librabbitmq_plugin.so
 %endif
 
 %if %{with simple_user_policy}
 %files plugin-simple-user-policy
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/simple-user-policy.cnf
 %{_libdir}/drizzle7/libsimple_user_policy_plugin.so
 %endif
 
 %if %{with slave}
 %files plugin-slave
-%defattr (-,root,root,-)
 %config(noreplace) %{_sysconfdir}/drizzle/conf.d/slave.cnf
 %{_libdir}/drizzle7/libslave_plugin.so
 %endif
