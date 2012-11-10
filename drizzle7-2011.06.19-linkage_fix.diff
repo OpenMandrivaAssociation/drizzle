@@ -1,0 +1,11 @@
+--- plugin/innobase/plugin.am	2011-06-20 16:19:17.730489166 +0200
++++ plugin/innobase/plugin.am.oden	2011-06-20 16:18:33.517489143 +0200
+@@ -348,7 +348,7 @@
+ 				    plugin/innobase/pars/pars0lex.c \
+ 				    plugin/innobase/pars/pars0grm.cc
+ 
+-plugin_innobase_libinnobase_la_LIBADD=	plugin/innobase/libpars.la
++plugin_innobase_libinnobase_la_LIBADD=	plugin/innobase/libpars.la -lz
+ 
+ plugin/innobase/pars/pars0grm.cc: plugin/innobase/pars/pars0grm.y
+ 	$(AM_V_GEN) $(YACC) -d $< -o plugin/innobase/pars/pars0grm.tab.cc

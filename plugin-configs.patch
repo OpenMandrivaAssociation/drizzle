@@ -1,0 +1,82 @@
+--- drizzle7-2011.03.11/plugin/auth_file/plugin.cnf.orig	2011-03-01 18:25:23.819256582 -0600
++++ drizzle7-2011.03.11/plugin/auth_file/plugin.cnf	2011-02-04 20:16:46.000000000 -0600
+@@ -0,0 +1,2 @@
++plugin-add=auth_file
++
+--- drizzle7-2011.03.11/plugin/auth_http/plugin.cnf.orig	2011-03-01 18:25:23.826255510 -0600
++++ drizzle7-2011.03.11/plugin/auth_http/plugin.cnf	2011-02-04 20:16:54.000000000 -0600
+@@ -0,0 +1,2 @@
++plugin-add=auth_http
++
+--- drizzle7-2011.03.11/plugin/auth_ldap/plugin.cnf.orig	2011-03-01 18:25:23.833254441 -0600
++++ drizzle7-2011.03.11/plugin/auth_ldap/plugin.cnf	2011-02-04 20:17:05.000000000 -0600
+@@ -0,0 +1,2 @@
++plugin-add=auth_ldap
++
+--- drizzle7-2011.03.11/plugin/auth_pam/plugin.cnf.orig	2011-03-01 18:25:23.840253370 -0600
++++ drizzle7-2011.03.11/plugin/auth_pam/plugin.cnf	2011-02-04 20:17:18.000000000 -0600
+@@ -0,0 +1,2 @@
++plugin-add=auth_pam
++
+--- drizzle7-2011.03.11/plugin/debug/plugin.cnf.orig	2011-03-01 18:25:23.854251231 -0600
++++ drizzle7-2011.03.11/plugin/debug/plugin.cnf	2011-02-16 15:16:23.000000000 -0600
+@@ -0,0 +1,2 @@
++plugin-add=debug
++
+--- drizzle7-2011.03.11/plugin/filtered_replicator/plugin.cnf.orig	2011-03-01 18:25:23.860250312 -0600
++++ drizzle7-2011.03.11/plugin/filtered_replicator/plugin.cnf	2011-02-04 20:18:06.000000000 -0600
+@@ -0,0 +1,2 @@
++plugin-add=filtered_replicator
++
+--- drizzle7-2011.03.11/plugin/gearman_udf/plugin.cnf.orig	2011-03-01 18:25:23.867249237 -0600
++++ drizzle7-2011.03.11/plugin/gearman_udf/plugin.cnf	2011-02-04 20:24:56.000000000 -0600
+@@ -0,0 +1,2 @@
++plugin-add=gearman_udf
++
+--- drizzle7-2011.03.11/plugin/haildb/plugin.cnf.orig	2011-03-01 18:25:23.874248166 -0600
++++ drizzle7-2011.03.11/plugin/haildb/plugin.cnf	2011-02-04 20:19:37.000000000 -0600
+@@ -0,0 +1,3 @@
++plugin-add=haildb
++plugin-remove=innobase
++
+--- drizzle7-2011.03.11/plugin/logging_gearman/plugin.cnf.orig	2011-03-01 18:25:23.881247100 -0600
++++ drizzle7-2011.03.11/plugin/logging_gearman/plugin.cnf	2011-02-04 20:18:44.000000000 -0600
+@@ -0,0 +1,2 @@
++plugin-add=logging_gearman
++
+--- drizzle7-2011.03.11/plugin/logging_query/plugin.cnf.orig	2011-03-01 18:25:23.888246031 -0600
++++ drizzle7-2011.03.11/plugin/logging_query/plugin.cnf	2011-02-04 20:18:30.000000000 -0600
+@@ -0,0 +1,2 @@
++plugin-add=logging_query
++
+--- drizzle7-2011.03.11/plugin/mysql_protocol/plugin.cnf.orig	2011-03-01 18:25:23.895244960 -0600
++++ drizzle7-2011.03.11/plugin/mysql_protocol/plugin.cnf	2011-02-04 20:19:15.000000000 -0600
+@@ -0,0 +1,9 @@
++# This configuration is disabled by default, as it potentially conflicts
++# with mysqld.  Uncomment the settings below to enable the mysql_protocol
++# plugin.
++#
++# ---
++#
++# plugin-add = mysql_protocol
++# mysql-protocol.port = 3306
++
+--- drizzle7-2011.03.11/plugin/pbms/plugin.cnf.orig	2011-03-01 18:25:23.902243887 -0600
++++ drizzle7-2011.03.11/plugin/pbms/plugin.cnf	2011-02-04 20:19:23.000000000 -0600
+@@ -0,0 +1,2 @@
++plugin-add=pbms
++
+--- drizzle7-2011.03.11/plugin/rabbitmq/plugin.cnf.orig	2011-03-01 18:25:23.909242816 -0600
++++ drizzle7-2011.03.11/plugin/rabbitmq/plugin.cnf	2011-02-04 20:19:51.000000000 -0600
+@@ -0,0 +1,2 @@
++plugin-add=rabbitmq
++
+--- drizzle7-2011.03.11/plugin/simple_user_policy/plugin.cnf.orig	2011-03-01 18:25:23.916241745 -0600
++++ drizzle7-2011.03.11/plugin/simple_user_policy/plugin.cnf	2011-02-04 20:20:06.000000000 -0600
+@@ -0,0 +1,2 @@
++plugin-add=simple_user_policy
++
+--- drizzle7-2011.03.11/plugin/slave/plugin.cnf.orig	2011-03-01 18:25:23.923240673 -0600
++++ drizzle7-2011.03.11/plugin/slave/plugin.cnf	2011-03-01 17:58:00.147605249 -0600
+@@ -0,0 +1 @@
++plugin-add=slave

@@ -1,0 +1,6 @@
+sources:
+  "drizzle7-2012.01.30.tar.gz:"	c0d9c3c8afd27028c86e5b18de80d379c78b6e1d
+  "drizzle.cnf:"	0a0e3fa271555f21f685b6be6721ea5f2cf9cfb7
+  "drizzled.cnf:"	55281ec73923b21f6680dfea0c7463aa080e85ca
+  "drizzled.init:"	1fe2cdf40a90d77a794f0e8f367211664fea7adf
+  "gen_plugin_configs_patch.sh:"	d3da7df398656ec0fc96c9800bbd55b64a0d00c1
