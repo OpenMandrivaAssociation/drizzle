@@ -49,7 +49,7 @@ Release:	2
 # Sources under plugin/ are either GPLv2 or BSD.
 License:	GPLv2 and BSD
 Group:		System/Servers
-URL:		http://launchpad.net/drizzle
+URL:		https://launchpad.net/drizzle
 # This is going to change every time
 Source0:	http://launchpad.net/drizzle/fremont/2012-01-13/+download/drizzle7-2012.01.30.tar.gz
 Source1:	drizzled.cnf
