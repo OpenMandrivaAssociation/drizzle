@@ -65,6 +65,11 @@ Patch3:		drizzle7-2011.01.07-tests.patch
 Patch7:		plugin-configs.patch
 Patch9:		drizzle7-2011.06.19-linkage_fix.diff
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	bison
 BuildRequires:	boost-devel >= 1.39
 BuildRequires:	curl-devel
